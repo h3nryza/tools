@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Key Validator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+    <script src="rsa_validator.js"></script>
+</head>
+<body>
+
+<h1>RSA Key Validator</h1>
+
+<section>
+    <h2>Upload RSA Key to Validate</h2>
+    <input type="file" id="rsaKeyFile" accept=".pem,.key">
+    <button class="green-button" onclick="validateRSAKey()">Validate RSA Key</button>
+
+    <div id="resultBlock" class="result-block" style="display:none;">
+        <h3>Validation Result</h3>
+        <div id="validationResult"></div>
+        <button class="green-button" onclick="copyToClipboard('validationResult')">Copy Result</button>
+        <button class="green-button" onclick="downloadContent('rsa_key_validation.txt', document.getElementById('validationResult').innerText)">Download Result</button>
+    </div>
+</section>
+
+</body>
+</html>
