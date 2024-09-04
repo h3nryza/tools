@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Certificates, CSR, and RSA Key Pair</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+    <script src="create_certificate.js"></script>
+</head>
+<body>
+
+<h1>Create Certificates, CSR, and RSA Key Pair</h1>
+
+<section>
+    <h2>Select Type</h2>
+    <select id="certType" onchange="adjustOptions()">
+        <option value="rsa">RSA Key Pair</option>
+        <option value="codeSigning">Code Signing Certificate</option>
+        <option value="selfSigned">Self-Signed Certificate</option>
+        <option value="csr">CSR (Certificate Signing Request)</option>
+    </select>
+
+    <h2>Key Settings</h2>
+    <label for="keySize">Key Size:</label>
+    <select id="keySize">
+        <option value="2048">2048 bits</option>
+        <option value="4096">4096 bits</option>
+    </select>
+
+    <div id="certSettings" style="display:none;">
+        <h2>Certificate/CSR Settings</h2>
+        <label for="commonName">Common Name (CN):</label>
+        <input type="text" id="commonName" placeholder="e.g., www.example.com">
+
+        <div id="sanSection" style="display:none;">
+            <label for="altNames">Subject Alternative Names (SANs):</label>
+            <input type="text" id="altNames" placeholder="e.g., www.example.net, example.org">
+        </div>
+
+        <label for="signatureAlg">Signature Algorithm:</label>
+        <select id="signatureAlg">
+            <option value="SHA256withRSA">SHA-256</option>
+            <option value="SHA1withRSA">SHA-1</option>
+            <option value="SHA384withRSA">SHA-384</option>
+            <option value="SHA512withRSA">SHA-512</option>
+        </select>
+
+        <label for="validityPeriod" id="validityLabel">Validity Period:</label>
+        <select id="validityPeriod">
+            <option value="1">1 year</option>
+            <option value="2">2 years</option>
+        </select>
+
+        <label for="organization">Organization Name (O):</label>
+        <input type="text" id="organization">
+
+        <label for="organizationalUnit">Organizational Unit (OU):</label>
+        <input type="text" id="organizationalUnit">
+
+        <label for="city">City (L):</label>
+        <input type="text" id="city">
+
+        <label for="state">State (ST):</label>
+        <input type="text" id="state">
+
+        <label for="country">Country (C):</label>
+        <select id="country">
+            <option value="">Loading countries...</option>
+        </select>
+    </div>
+
+    <button onclick="generateCertificate()">Generate</button>
+
+    <div id="resultBlock" class="result-block" style="display:none;">
+        <h3>Generated Output</h3>
+        <div id="output"></div>
+
+        <h3>How to Generate Locally</h3>
+        <pre id="localCodeBlock"></pre>
+        <button onclick="copyToClipboard(document.getElementById('localCodeBlock'))">Copy Command</button>
+        <button onclick="downloadContent('openssl_command.txt', document.getElementById('localCodeBlock').innerText)">Download Command</button>
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect Certificate</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+    <script src="inspect_certificate.js"></script>
+</head>
+<body>
+
+<h1>Inspect Certificate</h1>
+
+<section>
+    <!-- Option to Upload a Certificate File -->
+    <h2>Upload Certificate</h2>
+    <input type="file" id="certificateFile" accept=".pem, .der, .pfx, .crt" onchange="handleFileUpload()">
+
+    <!-- Option to Paste Certificate Data -->
+    <h2>Or Paste Certificate</h2>
+    <textarea id="inputData" placeholder="Paste your certificate here..." rows="10" style="width: 100%;"></textarea>
+    
+    <!-- Button to Start Inspection -->
+    <button onclick="inspectCertificate()">View Information</button>
+
+    <!-- Result Section -->
+    <div id="inspectionResult" class="result-block" style="display:none;">
+        <h3>Basic Information</h3>
+        <div id="basicInfo"></div>
+
+        <h3>Certificate Information</h3>
+        <div id="certInfo"></div>
+
+        <h3>Issuer Information</h3>
+        <div id="issuerInfo"></div>
+
+        <h3>Other Information</h3>
+        <div id="otherInfo"></div>
+
+        <h3>OpenSSL Command to Inspect Locally</h3>
+        <pre id="opensslCommand"></pre>
+        <button onclick="copyToClipboard(document.getElementById('opensslCommand'))">Copy Command</button>
+        <button onclick="downloadContent('inspect_command.txt', document.getElementById('opensslCommand').innerText)">Download Command</button>
+    </div>
+</section>
+
+</body>
+</html>
