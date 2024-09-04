@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Converter</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="converter.js"></script>
+</head>
+<body>
+
+<h1>Number Converter (Decimal, Hexadecimal, Binary)</h1>
+
+<section>
+    <h2>Conversion Options</h2>
+    
+    <label for="inputValue">Input Value:</label>
+    <input type="text" id="inputValue" placeholder="Enter a number">
+
+    <label for="inputType">Input Type:</label>
+    <select id="inputType">
+        <option value="decimal">Decimal</option>
+        <option value="hex">Hexadecimal</option>
+        <option value="binary">Binary</option>
+    </select>
+
+    <label for="outputType">Output Type:</label>
+    <select id="outputType">
+        <option value="decimal">Decimal</option>
+        <option value="hex">Hexadecimal</option>
+        <option value="binary">Binary</option>
+    </select>
+
+    <button onclick="convertNumber()">Convert</button>
+
+    <div id="resultBlock" class="result-block" style="display:none;">
+        <h3>Converted Output</h3>
+        <div id="output"></div>
+        <button onclick="copyToClipboard()">Copy Output</button>
+    </div>
+</section>
+
+</body>
+</html>
