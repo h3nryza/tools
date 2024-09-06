@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect CSR</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+    <script src="inspect.js"></script>
+</head>
+<body>
+
+<h1>Inspect Certificate Signing Request (CSR)</h1>
+
+<section>
+    <h2>Paste or Upload CSR to Inspect</h2>
+    
+    <!-- File Upload Section -->
+    <input type="file" id="csrFileInput" accept=".pem,.txt">
+    <button onclick="loadCsrFromFile()">Upload and Inspect CSR</button>
+
+    <hr/>
+
+    <!-- Paste CSR Section -->
+    <textarea id="csrInput" placeholder="Paste your CSR here..." rows="10" style="width: 100%;"></textarea>
+    <button onclick="inspectCsr()">Inspect CSR</button>
+
+    <!-- Inspection Result -->
+    <div id="inspectionResult" class="result-block" style="display:none;">
+        <h3>CSR Details</h3>
+        <div class="code-block">
+            <pre id="csrDetails"></pre>
+        </div>
+        <button class="green-button" onclick="copyToClipboard('csrDetails')">Copy Details</button>
+        <button class="green-button" onclick="downloadContent('csr_details.txt', document.getElementById('csrDetails').innerText)">Download Details</button>
+
+        <h3>OpenSSL Command to Inspect Locally</h3>
+        <div class="code-block">
+            <pre id="opensslCommand"></pre>
+        </div>
+        <button class="green-button" onclick="copyToClipboard('opensslCommand')">Copy Command</button>
+        <button class="green-button" onclick="downloadContent('inspect_csr_command.txt', document.getElementById('opensslCommand').innerText)">Download Command</button>
+    </div>
+</section>
+
+</body>
+</html>
