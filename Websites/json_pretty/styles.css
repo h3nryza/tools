@@ -1,0 +1,67 @@
+/* Container for the input area with line numbers */
+.line-numbered-container {
+  display: flex;
+  width: 100%;
+  height: auto;
+}
+
+/* Line numbers container */
+.line-numbers {
+  padding-right: 10px;
+  text-align: right;
+  user-select: none;
+  font-family: monospace;
+  color: #888;
+}
+
+/* Container for the input area */
+.input-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;  /* Hide overflow */
+}
+
+/* Textarea for user input */
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  resize: none;  /* Disable manual resizing */
+  outline: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: hidden;  /* Hide vertical scrollbar */
+  height: auto;
+}
+
+/* Preformatted output */
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 16px;
+}
+
+/* Rainbow colors for the brackets */
+.bracket-color-1 { color: #FF5733; }   /* Red */
+.bracket-color-2 { color: #33FF57; }   /* Green */
+.bracket-color-3 { color: #3357FF; }   /* Blue */
+.bracket-color-4 { color: #FFC300; }   /* Yellow */
+.bracket-color-5 { color: #DAF7A6; }   /* Light Green */
+.bracket-color-6 { color: #FF33FF; }   /* Magenta */
+.bracket-color-7 { color: #33FFFF; }   /* Cyan */
+
+/* Button styling */
+button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #4cae4c;
+}

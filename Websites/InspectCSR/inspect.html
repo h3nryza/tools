@@ -13,19 +13,10 @@
 <h1>Inspect Certificate Signing Request (CSR)</h1>
 
 <section>
-    <h2>Paste or Upload CSR to Inspect</h2>
-    
-    <!-- File Upload Section -->
-    <input type="file" id="csrFileInput" accept=".pem,.txt">
-    <button onclick="loadCsrFromFile()">Upload and Inspect CSR</button>
-
-    <hr/>
-
-    <!-- Paste CSR Section -->
+    <h2>Paste CSR to Inspect</h2>
     <textarea id="csrInput" placeholder="Paste your CSR here..." rows="10" style="width: 100%;"></textarea>
     <button onclick="inspectCsr()">Inspect CSR</button>
 
-    <!-- Inspection Result -->
     <div id="inspectionResult" class="result-block" style="display:none;">
         <h3>CSR Details</h3>
         <div class="code-block">
