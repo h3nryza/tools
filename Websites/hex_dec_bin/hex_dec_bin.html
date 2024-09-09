@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hex, Decimal, Binary Converter</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="hex_dec_bin.js" defer></script>
+</head>
+<body>
+
+<h1>Hexadecimal, Decimal, Binary Converter</h1>
+
+<section>
+    <div class="input-block">
+        <h2>Hexadecimal</h2>
+        <textarea id="hexInput" placeholder="Enter hex value" oninput="convertFromHex()" onkeyup="autoResize(this)"></textarea>
+    </div>
+
+    <div class="input-block">
+        <h2>Binary</h2>
+        <textarea id="binaryInput" placeholder="Enter binary value" oninput="convertFromBinary()" onkeyup="autoResize(this)"></textarea>
+    </div>
+
+    <div class="input-block">
+        <h2>Decimal</h2>
+        <textarea id="decimalInput" placeholder="Enter decimal value" oninput="convertFromDecimal()" onkeyup="autoResize(this)"></textarea>
+    </div>
+</section>
+
+</body>
+</html>
