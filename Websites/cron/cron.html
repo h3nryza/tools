@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cron Job Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="cron_calculator.js" defer></script>
+</head>
+<body>
+
+<h1>Cron Job Calculator</h1>
+<p>Generate and understand cron expressions with ease! Advanced features supported: <br>
+<strong>Seconds, List Values, Range Values, Step Values, Pre-set Cron Templates</strong>.</p>
+
+<section>
+    <div class="input-block">
+        <h2>Cron Expression</h2>
+
+        <div class="cron-section">
+            <div class="cron-group">
+                <label for="second">Second:</label>
+                <input type="text" id="second" placeholder="*" oninput="updateCron()" />
+            </div>
+
+            <div class="cron-group">
+                <label for="minute">Minute:</label>
+                <input type="text" id="minute" placeholder="*" oninput="updateCron()" />
+            </div>
+
+            <div class="cron-group">
+                <label for="hour">Hour:</label>
+                <input type="text" id="hour" placeholder="*" oninput="updateCron()" />
+            </div>
+
+            <div class="cron-group">
+                <label for="dayOfMonth">Day of Month:</label>
+                <input type="text" id="dayOfMonth" placeholder="*" oninput="updateCron()" />
+            </div>
+
+            <div class="cron-group">
+                <label for="month">Month:</label>
+                <input type="text" id="month" placeholder="*" oninput="updateCron()" />
+            </div>
+
+            <div class="cron-group">
+                <label for="dayOfWeek">Day of Week:</label>
+                <input type="text" id="dayOfWeek" placeholder="*" oninput="updateCron()" />
+            </div>
+        </div>
+    </div>
+
+    <div class="result-block">
+        <h2>Generated Cron Expression</h2>
+        <input type="text" id="cronResult" readonly>
+
+        <h2>Human-readable Schedule</h2>
+        <pre id="humanReadable"></pre>
+    </div>
+
+    <div class="examples-block">
+        <h2>Common Cron Schedules</h2>
+        <button onclick="setCronExample('runOnce')">Run Once</button>
+        <button onclick="setCronExample('everyMorning')">Every Morning</button>
+        <button onclick="setCronExample('onceAYear')">Once a Year</button>
+        <button onclick="setCronExample('startup')">Run on Startup</button>
+        <button onclick="setCronExample('yearly')">Yearly</button>
+        <button onclick="setCronExample('monthly')">Monthly</button>
+        <button onclick="setCronExample('weekly')">Weekly</button>
+        <button onclick="setCronExample('daily')">Daily</button>
+        <button onclick="setCronExample('hourly')">Hourly</button>
+    </div>
+</section>
+
+</body>
+</html>

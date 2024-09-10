@@ -12,8 +12,8 @@ function populateCountryList() {
           countrySelect.innerHTML = ''; // Clear the initial loading option
           countries.forEach(country => {
               const option = document.createElement('option');
-              option.value = country.cca2; // ISO 3166-1 alpha-2 code
-              option.text = country.name.common; // Country name
+              option.value = escapeHtml(country.cca2); // ISO 3166-1 alpha-2 code
+              option.text = escapeHtml(country.name.common); // Country name
               countrySelect.add(option);
           });
       })
@@ -52,13 +52,13 @@ function generateCertificate() {
   const keySize = parseInt(document.getElementById('keySize').value);
   const signatureAlg = document.getElementById('signatureAlg').value;
   const validityPeriod = parseInt(document.getElementById('validityPeriod').value);
-  const commonName = document.getElementById('commonName').value;
-  const organization = document.getElementById('organization').value;
-  const organizationalUnit = document.getElementById('organizationalUnit').value;
-  const city = document.getElementById('city').value;
-  const state = document.getElementById('state').value;
-  const country = document.getElementById('country').value;
-  const altNames = document.getElementById('altNames').value.split(',').map(name => name.trim());
+  const commonName = escapeHtml(document.getElementById('commonName').value);
+  const organization = escapeHtml(document.getElementById('organization').value);
+  const organizationalUnit = escapeHtml(document.getElementById('organizationalUnit').value);
+  const city = escapeHtml(document.getElementById('city').value);
+  const state = escapeHtml(document.getElementById('state').value);
+  const country = escapeHtml(document.getElementById('country').value);
+  const altNames = document.getElementById('altNames').value.split(',').map(name => escapeHtml(name.trim()));
 
   let output = '';
   const keys = forge.pki.rsa.generateKeyPair(keySize);
@@ -130,7 +130,7 @@ function generateCertificate() {
       output += generateOutputBlock('Certificate', forge.pki.certificateToPem(cert), `${commonName || 'certificate'}-${certType}-${getCurrentDate()}.crt`);
   }
 
-  document.getElementById('output').innerHTML = output;
+  document.getElementById('output').innerHTML = escapeHtml(output);
   document.getElementById('resultBlock').style.display = 'block';
 
   // Generate the local OpenSSL command
@@ -140,10 +140,10 @@ function generateCertificate() {
 
 function generateOutputBlock(title, content, filename) {
   return `
-      <h4>${title}</h4>
-      <pre>${content}</pre>
-      <button onclick="copyToClipboard(this.previousElementSibling)">Copy ${title}</button>
-      <button onclick="downloadContent('${filename}', \`${content.replace(/`/g, '\\`')}\`)">Download ${title}</button>
+      <h4>${escapeHtml(title)}</h4>
+      <pre>${content}</pre>  <!-- No escaping here for certificate content -->
+      <button onclick="copyToClipboard(this.previousElementSibling)">Copy ${escapeHtml(title)}</button>
+      <button onclick="downloadContent('${escapeHtml(filename)}', ${JSON.stringify(content)})">Download ${escapeHtml(title)}</button>
   `;
 }
 
@@ -188,10 +188,20 @@ function downloadContent(filename, content) {
   URL.revokeObjectURL(link.href); // Clean up the URL object
 }
 
+
 function getCurrentDate() {
   const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
