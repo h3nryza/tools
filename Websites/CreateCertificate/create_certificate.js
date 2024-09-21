@@ -130,7 +130,7 @@ function generateCertificate() {
       output += generateOutputBlock('Certificate', forge.pki.certificateToPem(cert), `${commonName || 'certificate'}-${certType}-${getCurrentDate()}.crt`);
   }
 
-  document.getElementById('output').innerHTML = escapeHtml(output);
+  document.getElementById('output').innerHTML = output;  // Render the HTML directly
   document.getElementById('resultBlock').style.display = 'block';
 
   // Generate the local OpenSSL command
@@ -140,13 +140,16 @@ function generateCertificate() {
 
 function generateOutputBlock(title, content, filename) {
   return `
-      <h4>${escapeHtml(title)}</h4>
-      <pre>${content}</pre>  <!-- No escaping here for certificate content -->
-      <button onclick="copyToClipboard(this.previousElementSibling)">Copy ${escapeHtml(title)}</button>
-      <button onclick="downloadContent('${escapeHtml(filename)}', ${JSON.stringify(content)})">Download ${escapeHtml(title)}</button>
+      <div class="output-section">
+        <h4>${escapeHtml(title)}</h4>
+        <pre>${content}</pre>  <!-- No escaping here for certificate content -->
+        <div class="action-buttons">
+            <button onclick="copyToClipboard(this.closest('.output-section').querySelector('pre'))">Copy ${escapeHtml(title)}</button>
+            <button onclick="downloadContent('${escapeHtml(filename)}', ${JSON.stringify(content)})">Download ${escapeHtml(title)}</button>
+        </div>
+      </div>
   `;
 }
-
 
 function generateLocalCommand(certType, keySize, commonName, organization, organizationalUnit, city, state, country, altNames, validityPeriod) {
   let command = '';
@@ -187,7 +190,6 @@ function downloadContent(filename, content) {
   link.click();
   URL.revokeObjectURL(link.href); // Clean up the URL object
 }
-
 
 function getCurrentDate() {
   const date = new Date();
