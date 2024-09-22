@@ -18,7 +18,7 @@ h2, h3 {
 
 section {
   display: flex;
-  flex-direction: column;  /* Stack blocks vertically */
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -36,8 +36,11 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
-  resize: none;  /* Disable manual resizing */
-  overflow: hidden;  /* Hide scrollbar */
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  position: relative;
+  z-index: 1;
 }
 
 textarea:focus {
@@ -45,9 +48,39 @@ textarea:focus {
   border-color: #5cb85c;
 }
 
+.textarea-container {
+  position: relative;
+  width: 100%;
+}
+
+#highlightedText {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  z-index: 0; /* Place it behind the textarea */
+  background-color: #fff;
+  color: transparent;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
 .result-block {
   background: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input[type="number"] {
+  margin-left: 10px;
+  padding: 5px;
+  width: 60px;
+}
+
+.highlighted {
+  background-color: yellow;
 }
