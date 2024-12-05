@@ -3,25 +3,35 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function populateCountryList() {
-  const countrySelect = document.getElementById('country');
+    const countrySelect = document.getElementById('country');
+    countrySelect.innerHTML = ''; // Clear the initial loading option
 
-  fetch('https://restcountries.com/v3.1/all')
-      .then(response => response.json())
-      .then(countries => {
-          countries.sort((a, b) => a.name.common.localeCompare(b.name.common)); // Sort countries alphabetically
-          countrySelect.innerHTML = ''; // Clear the initial loading option
-          countries.forEach(country => {
-              const option = document.createElement('option');
-              option.value = escapeHtml(country.cca2); // ISO 3166-1 alpha-2 code
-              option.text = escapeHtml(country.name.common); // Country name
-              countrySelect.add(option);
-          });
-      })
-      .catch(error => {
-          console.error('Error fetching country list:', error);
-          countrySelect.innerHTML = '<option value="">Error loading countries</option>';
-      });
+    const option = document.createElement('option');
+    option.value = 'ZA'; // ISO 3166-1 alpha-2 code for South Africa
+    option.text = 'South Africa'; // Country name
+    countrySelect.add(option);
 }
+
+// function populateCountryList() {
+//   const countrySelect = document.getElementById('country');
+
+//   fetch('https://restcountries.com/v3.1/name/all')
+//       .then(response => response.json())
+//       .then(countries => {
+//           countries.sort((a, b) => a.name.common.localeCompare(b.name.common)); // Sort countries alphabetically
+//           countrySelect.innerHTML = ''; // Clear the initial loading option
+//           countries.forEach(country => {
+//               const option = document.createElement('option');
+//               option.value = escapeHtml(country.cca2); // ISO 3166-1 alpha-2 code
+//               option.text = escapeHtml(country.name.common); // Country name
+//               countrySelect.add(option);
+//           });
+//       })
+//       .catch(error => {
+//           console.error('Error fetching country list:', error);
+//           countrySelect.innerHTML = '<option value="">Error loading countries</option>';
+//       });
+// }
 
 function adjustOptions() {
   const certType = document.getElementById('certType').value;
