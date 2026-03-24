@@ -1,18 +1,30 @@
 #!/bin/bash
 
 # Define the URL of the helper_functions.sh file on GitHub
-HELPER_FILE_URL="https://raw.githubusercontent.com/h3nryza/tools/main/scripts/helper_functions.sh"
+HELPER_FILE_URL="https://raw.githubusercontent.com/h3nryza/tools/main/Scripts/helper_functions.sh"
 
 # Define the location of the helper_functions.sh file on the local machine
 LOCAL_HELPER_FILE="$HOME/.helper_functions.sh"
 
-# Download the helper_functions.sh file from GitHub
+# Download the helper_functions.sh file from GitHub over HTTPS
 echo "Downloading helper_functions.sh from GitHub..."
-curl -o "$LOCAL_HELPER_FILE" -s "$HELPER_FILE_URL"
+curl -fSL --max-time 30 -o "$LOCAL_HELPER_FILE" "$HELPER_FILE_URL"
 
 if [ $? -ne 0 ]; then
   echo "Failed to download helper_functions.sh."
   exit 1
+fi
+
+# Verify the downloaded file is not empty and looks like a shell script
+if [ ! -s "$LOCAL_HELPER_FILE" ]; then
+  echo "Error: Downloaded file is empty."
+  rm -f "$LOCAL_HELPER_FILE"
+  exit 1
+fi
+
+if ! head -1 "$LOCAL_HELPER_FILE" | grep -q "^#"; then
+  echo "Warning: Downloaded file does not appear to be a valid shell script."
+  echo "Please verify the file manually at: $LOCAL_HELPER_FILE"
 fi
 
 echo "Successfully downloaded helper_functions.sh to $LOCAL_HELPER_FILE"

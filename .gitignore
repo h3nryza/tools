@@ -1,4 +1,27 @@
-*.DS_Store
-*/*.DS_Store
-**.DS_Store
-/*.DS_Store
+# macOS
+.DS_Store
+
+# Sensitive files — never commit secrets
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+credentials.json
+*.credentials
+secrets.*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (if added later)
+node_modules/
+package-lock.json
+
+# OS files
+Thumbs.db

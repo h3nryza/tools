@@ -48,11 +48,14 @@ detect_certificate_type() {
     file_type=$(file --mime-type -b "$cert_file")
     
     if [[ "$file_type" == "application/x-x509-ca-cert" ]]; then
-        echo "pem"
+        # Check if it's PEM (text) or DER (binary) by looking for PEM markers
+        if grep -q "BEGIN CERTIFICATE" "$cert_file" 2>/dev/null; then
+            echo "pem"
+        else
+            echo "der"
+        fi
     elif [[ "$file_type" == "application/pkcs12" ]]; then
         echo "pfx"
-    elif [[ "$file_type" == "application/x-x509-ca-cert" ]]; then
-        echo "der"
     else
         echo "unknown"
     fi
@@ -84,7 +87,7 @@ get_certificate_info() {
     echo "Hex Serial Number: $SERIAL_HEX"
 
     # Decimal Serial Number
-    SERIAL_DEC=$(hex_to_decimal $SERIAL_HEX)
+    SERIAL_DEC=$(hex_to_decimal "$SERIAL_HEX")
     echo "Decimal Serial Number: $SERIAL_DEC"
 
     # Thumbprint (SHA-1)

@@ -39,7 +39,7 @@ list_helpers() {
   echo "33. num2perm - Convert numeric permissions to symbolic format"
   echo "34. unset_tf - Unset Terraform and related environment variables"
   echo "35. unset_aws - Unset AWS environment variables"
-  echo "36. unset - Unset all environment variables"
+  echo "36. unset_all - Unset all Terraform and AWS environment variables"
 }
 
 # Function to list all defined aliases
@@ -514,8 +514,9 @@ unset_aws() {
     echo "AWS environment variables have been unset."
 }
 
-# Function to unset AWS environment variables
-unset() {
+# Function to unset all Terraform and AWS environment variables
+# Named unset_all to avoid collision with the bash builtin 'unset'
+unset_all() {
     unset TF_WORKSPACE
     unset ENVIRONMENT
     unset GITHUB_TOKEN
@@ -523,5 +524,5 @@ unset() {
     unset AWS_SECRET_ACCESS_KEY
     unset AWS_SESSION_TOKEN
 
-    echo "Environment variables are unset."
+    echo "All environment variables have been unset."
 }
