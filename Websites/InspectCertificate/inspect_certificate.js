@@ -1,5 +1,16 @@
 let certificateContent = '';
 
+// Escape HTML special characters to prevent XSS
+function escapeHtml(unsafe) {
+    if (typeof unsafe !== 'string') return String(unsafe);
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function handleFileUpload() {
     const fileInput = document.getElementById('certificateFile');
     const file = fileInput.files[0];
@@ -54,17 +65,17 @@ function inspectCertificate() {
 
         const isValid = !isExpired;
 
-        // Basic Information
+        // Basic Information — escape all dynamic values to prevent XSS
         const basicInfo = `
-            <strong>Common Name (CN):</strong> ${cert.subject.getField('CN').value}<br>
-            <strong>Subject Alternative Names:</strong> ${getSubjectAltNames(cert)}<br>
-            <strong>Hex Serial Number:</strong> ${cert.serialNumber}<br>
+            <strong>Common Name (CN):</strong> ${escapeHtml(cert.subject.getField('CN').value)}<br>
+            <strong>Subject Alternative Names:</strong> ${escapeHtml(getSubjectAltNames(cert))}<br>
+            <strong>Hex Serial Number:</strong> ${escapeHtml(cert.serialNumber)}<br>
             <strong>Decimal Serial Number:</strong> ${BigInt('0x' + cert.serialNumber).toString()}<br>
-            <strong>Thumbprint:</strong> ${getThumbprint(cert)}<br>
-            <strong>Date Issued:</strong> ${cert.validity.notBefore}<br>
-            <strong>Date of Expiration:</strong> ${cert.validity.notAfter}<br>
+            <strong>Thumbprint:</strong> ${escapeHtml(getThumbprint(cert))}<br>
+            <strong>Date Issued:</strong> ${escapeHtml(String(cert.validity.notBefore))}<br>
+            <strong>Date of Expiration:</strong> ${escapeHtml(String(cert.validity.notAfter))}<br>
             <strong>Certificate is Valid:</strong> ${isValid ? '<span style="color: green;">True</span>' : '<span style="color: red;">False</span>'}<br>
-            <strong>Certificate Type:</strong> ${certType}<br>
+            <strong>Certificate Type:</strong> ${escapeHtml(certType)}<br>
         `;
 
         // Certificate Information (Subject)
@@ -161,7 +172,7 @@ function getExtendedKeyUsage(cert) {
 // Function to extract fields from the certificate
 function getCertificateFields(entity) {
     return entity.attributes.map(attr => `
-        <strong>${attr.name}:</strong> ${attr.value}<br>
+        <strong>${escapeHtml(attr.name)}:</strong> ${escapeHtml(attr.value)}<br>
     `).join('');
 }
 

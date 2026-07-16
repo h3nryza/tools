@@ -63,7 +63,7 @@ get_serial_number() {
     fi
 
     # Convert the serial number from hex to decimal
-    SERIAL_DEC=$(hex_to_decimal $SERIAL_HEX)
+    SERIAL_DEC=$(hex_to_decimal "$SERIAL_HEX")
 
     echo "Hex Serial Number: $SERIAL_HEX"
     echo "Decimal Serial Number: $SERIAL_DEC"

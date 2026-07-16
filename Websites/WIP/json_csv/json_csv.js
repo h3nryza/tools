@@ -124,9 +124,9 @@ function parseCsvLine(line) {
 
 function copyToClipboard() {
   const resultOutput = document.getElementById('resultOutput');
-  resultOutput.select();
-  document.execCommand('copy');
-  alert("Copied to clipboard");
+  navigator.clipboard.writeText(resultOutput.value).then(() => {
+      alert("Copied to clipboard");
+  });
 }
 
 function downloadResult() {

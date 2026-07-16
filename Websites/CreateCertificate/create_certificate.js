@@ -152,7 +152,7 @@ function generateOutputBlock(title, content, filename) {
   return `
       <div class="output-section">
         <h4>${escapeHtml(title)}</h4>
-        <pre>${content}</pre>  <!-- No escaping here for certificate content -->
+        <pre>${escapeHtml(content)}</pre>
         <div class="action-buttons">
             <button onclick="copyToClipboard(this.closest('.output-section').querySelector('pre'))">Copy ${escapeHtml(title)}</button>
             <button onclick="downloadContent('${escapeHtml(filename)}', ${JSON.stringify(content)})">Download ${escapeHtml(title)}</button>

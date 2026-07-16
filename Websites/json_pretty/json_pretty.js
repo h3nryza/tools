@@ -16,13 +16,19 @@ function updateLineNumbers(textareaId, lineNumberId) {
   lineNumbersDiv.innerText = lineNumberText;
 }
 
+// Escape HTML special characters to prevent XSS
+function escapeHtml(char) {
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return map[char] || char;
+}
+
 // Function to apply rainbow brackets to JSON content
 function applyRainbowBrackets(jsonInput) {
   const brackets = ['{', '}', '[', ']', '(', ')'];
   let depth = 0;
   const colors = [
-      'bracket-color-1', 'bracket-color-2', 'bracket-color-3', 
-      'bracket-color-4', 'bracket-color-5', 'bracket-color-6', 
+      'bracket-color-1', 'bracket-color-2', 'bracket-color-3',
+      'bracket-color-4', 'bracket-color-5', 'bracket-color-6',
       'bracket-color-7'
   ];
 
@@ -31,7 +37,7 @@ function applyRainbowBrackets(jsonInput) {
   // Iterate over each character in the JSON input
   for (let i = 0; i < jsonInput.length; i++) {
       const char = jsonInput[i];
-      
+
       if (brackets.includes(char)) {
           const colorClass = colors[(depth % colors.length)];
 
@@ -51,7 +57,7 @@ function applyRainbowBrackets(jsonInput) {
           } else if (char === ' ') {
               result += '&nbsp;';
           } else {
-              result += char;  // Preserve other characters as is
+              result += escapeHtml(char);  // Escape to prevent XSS
           }
       }
   }

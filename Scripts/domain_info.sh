@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Validate domain name to prevent command injection
+validate_domain() {
+    local domain="$1"
+    # Allow only valid domain name characters: alphanumeric, hyphens, dots
+    if [[ ! "$domain" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$ ]]; then
+        echo "Error: Invalid domain name: $domain"
+        echo "Domain names may only contain letters, numbers, hyphens, and dots."
+        return 1
+    fi
+    return 0
+}
+
 # Function to display help information
 display_help() {
     echo "Usage: $0 --domains=domain1,domain2,... --checks=check1,check2,... [--all] [--output_all=LOCATION] [--input=FILE]"
@@ -84,24 +96,25 @@ show_progress() {
 }
 
 # Functions to perform individual checks with formatted output
-whois_lookup() { show_progress "WHOIS Lookup"; result=$(whois $domain); append_html_output "WHOIS" "$result"; }
-dns_a_lookup() { show_progress "DNS A Record Lookup"; result=$(dig +short A $domain); append_html_output "DNS A" "$result"; }
-mx_record_lookup() { show_progress "MX Record Lookup"; result=$(dig +short MX $domain); append_html_output "MX" "$result"; }
-spf_record_lookup() { show_progress "SPF Record Lookup"; result=$(dig +short TXT $domain | grep 'v=spf1'); append_html_output "SPF" "$result"; }
-txt_record_lookup() { show_progress "TXT Record Lookup"; result=$(dig +short TXT $domain); append_html_output "TXT" "$result"; }
-ptr_record_lookup() { show_progress "PTR Record Lookup"; result=$(dig +short PTR $domain); append_html_output "PTR" "$result"; }
-cname_record_lookup() { show_progress "CNAME Record Lookup"; result=$(dig +short CNAME $domain); append_html_output "CNAME" "$result"; }
-arin_lookup() { show_progress "ARIN Lookup"; result=$(whois $domain | grep -i "netrange\|cidr\|orgname"); append_html_output "ARIN" "$result"; }
-soa_record_lookup() { show_progress "SOA Record Lookup"; result=$(dig +short SOA $domain); append_html_output "SOA" "$result"; }
-tcp_check() { show_progress "TCP Check"; result=$(timeout 5 bash -c "</dev/tcp/$domain/80" && echo "TCP connection to port 80 successful" || echo "TCP connection to port 80 failed"); append_html_output "TCP" "$result"; }
-http_check() { show_progress "HTTP Check"; result=$(curl -Is http://$domain | head -n 1); append_html_output "HTTP" "$result"; }
-https_check() { show_progress "HTTPS Check"; result=$(curl -Is https://$domain | head -n 1); append_html_output "HTTPS" "$result"; }
-ns_record_lookup() { show_progress "NS Record Lookup"; result=$(dig +short NS $domain); append_html_output "NS" "$result"; }
-ip_lookup() { show_progress "IP Lookup"; result=$(dig +short $domain); append_html_output "IP" "$result"; }
-srv_record_lookup() { show_progress "SRV Record Lookup"; result=$(dig +short SRV $domain); append_html_output "SRV" "$result"; }
-aaaa_record_lookup() { show_progress "AAAA Record Lookup"; result=$(dig +short AAAA $domain); append_html_output "AAAA" "$result"; }
-ping_test() { show_progress "Ping Test"; result=$(ping -c 5 $domain); append_html_output "PING" "$result"; }
-trace_route() { show_progress "Trace Route"; result=$(traceroute -m 5 $domain); append_html_output "TRACE" "$result"; }
+# All variables are quoted to prevent command injection
+whois_lookup() { show_progress "WHOIS Lookup"; result=$(whois "$domain"); append_html_output "WHOIS" "$result"; }
+dns_a_lookup() { show_progress "DNS A Record Lookup"; result=$(dig +short A "$domain"); append_html_output "DNS A" "$result"; }
+mx_record_lookup() { show_progress "MX Record Lookup"; result=$(dig +short MX "$domain"); append_html_output "MX" "$result"; }
+spf_record_lookup() { show_progress "SPF Record Lookup"; result=$(dig +short TXT "$domain" | grep 'v=spf1'); append_html_output "SPF" "$result"; }
+txt_record_lookup() { show_progress "TXT Record Lookup"; result=$(dig +short TXT "$domain"); append_html_output "TXT" "$result"; }
+ptr_record_lookup() { show_progress "PTR Record Lookup"; result=$(dig +short PTR "$domain"); append_html_output "PTR" "$result"; }
+cname_record_lookup() { show_progress "CNAME Record Lookup"; result=$(dig +short CNAME "$domain"); append_html_output "CNAME" "$result"; }
+arin_lookup() { show_progress "ARIN Lookup"; result=$(whois "$domain" | grep -i "netrange\|cidr\|orgname"); append_html_output "ARIN" "$result"; }
+soa_record_lookup() { show_progress "SOA Record Lookup"; result=$(dig +short SOA "$domain"); append_html_output "SOA" "$result"; }
+tcp_check() { show_progress "TCP Check"; result=$(timeout 5 bash -c "echo >/dev/tcp/\"$domain\"/80" 2>&1 && echo "TCP connection to port 80 successful" || echo "TCP connection to port 80 failed"); append_html_output "TCP" "$result"; }
+http_check() { show_progress "HTTP Check"; result=$(curl -Is --max-time 10 "http://$domain" | head -n 1); append_html_output "HTTP" "$result"; }
+https_check() { show_progress "HTTPS Check"; result=$(curl -Is --max-time 10 "https://$domain" | head -n 1); append_html_output "HTTPS" "$result"; }
+ns_record_lookup() { show_progress "NS Record Lookup"; result=$(dig +short NS "$domain"); append_html_output "NS" "$result"; }
+ip_lookup() { show_progress "IP Lookup"; result=$(dig +short "$domain"); append_html_output "IP" "$result"; }
+srv_record_lookup() { show_progress "SRV Record Lookup"; result=$(dig +short SRV "$domain"); append_html_output "SRV" "$result"; }
+aaaa_record_lookup() { show_progress "AAAA Record Lookup"; result=$(dig +short AAAA "$domain"); append_html_output "AAAA" "$result"; }
+ping_test() { show_progress "Ping Test"; result=$(ping -c 5 "$domain"); append_html_output "PING" "$result"; }
+trace_route() { show_progress "Trace Route"; result=$(traceroute -m 5 "$domain"); append_html_output "TRACE" "$result"; }
 
 # Function to perform all checks
 perform_all_checks() {
@@ -176,6 +189,12 @@ fi
 
 # Perform the requested checks for each domain
 for domain in "${domains[@]}"; do
+    # Validate domain before processing to prevent command injection
+    if ! validate_domain "$domain"; then
+        echo "Skipping invalid domain: $domain"
+        continue
+    fi
+
     output_html_file=$(mktemp)  # Create a temporary file to store HTML output for each domain
 
     # Start the HTML output file with the header
